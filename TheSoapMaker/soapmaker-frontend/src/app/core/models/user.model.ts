@@ -6,6 +6,8 @@ export interface User {
   bio: string;
   isPremium: boolean;
   isInTrial: boolean;
+  trialStartedAt: string | null;
   trialEndsAt: string | null;
-  createdAt: string;
+  trialDaysRemaining: number | null;
+  dateJoined: string;
 }

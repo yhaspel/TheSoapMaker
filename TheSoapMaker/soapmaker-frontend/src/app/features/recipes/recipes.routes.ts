@@ -20,6 +20,12 @@ export const RECIPE_ROUTES: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'bookmarks',
+    loadComponent: () =>
+      import('./bookmarks/bookmarks.component').then(m => m.BookmarksComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: ':slug',
     loadComponent: () =>
       import('./recipe-detail/recipe-detail.component').then(m => m.RecipeDetailComponent),

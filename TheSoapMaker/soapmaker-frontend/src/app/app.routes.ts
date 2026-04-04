@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/premium/premium.routes').then(m => m.PREMIUM_ROUTES),
   },
   {
+    path: 'users/:id',
+    loadComponent: () => import('./features/users/user-public-profile.component').then(m => m.UserPublicProfileComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

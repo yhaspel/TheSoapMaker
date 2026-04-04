@@ -1,26 +1,151 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
+// ─── Reset ────────────────────────────────────────────────────────────────────
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+// ─── Base ─────────────────────────────────────────────────────────────────────
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 16px;
+  font-family: $font-sans;
+  font-size: $text-base;
   color: $color-text;
   background-color: $color-bg;
   line-height: 1.6;
+  min-height: 100vh;
 }
 
-a {
-  color: $color-primary;
-  text-decoration: none;
-  &:hover { text-decoration: underline; }
-}
+img { max-width: 100%; display: block; }
+a { color: $color-terracotta; text-decoration: none; &:hover { text-decoration: underline; } }
 
+// ─── Typography ───────────────────────────────────────────────────────────────
 h1, h2, h3, h4, h5, h6 {
-  line-height: 1.2;
+  font-family: $font-serif;
+  line-height: 1.25;
   color: $color-heading;
+}
+h1 { font-size: $text-4xl; }
+h2 { font-size: $text-3xl; }
+h3 { font-size: $text-2xl; }
+h4 { font-size: $text-xl; }
+p  { margin-bottom: $space-4; &:last-child { margin-bottom: 0; } }
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+.btn {
+  @include btn-base;
+  @include focus-ring;
+}
+
+.btn-primary {
+  @extend .btn;
+  background: $color-terracotta;
+  color: #fff;
+  &:hover { background: $color-terracotta-dark; box-shadow: $shadow-md; }
+}
+
+.btn-secondary {
+  @extend .btn;
+  background: transparent;
+  color: $color-terracotta;
+  border: 2px solid $color-terracotta;
+  &:hover { background: rgba($color-terracotta, .06); }
+}
+
+.btn-ghost {
+  @extend .btn;
+  background: transparent;
+  color: $color-text-muted;
+  &:hover { background: $color-cream-dark; color: $color-text; }
+}
+
+.btn-sm { padding: $space-1 $space-3; font-size: $text-xs; }
+.btn-lg { padding: $space-3 $space-8; font-size: $text-lg; }
+
+// ─── Badges ───────────────────────────────────────────────────────────────────
+.badge {
+  display: inline-block;
+  padding: 2px $space-2;
+  border-radius: 4px;
+  font-size: $text-xs;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-method  { background: #ede0d3; color: $color-terracotta; }
+.badge-difficulty-beginner     { background: #d4e6d3; color: #2a6e3a; }
+.badge-difficulty-intermediate { background: #fdf0d5; color: #8a5e00; }
+.badge-difficulty-advanced     { background: #fde8e8; color: #8b1a1a; }
+.badge-premium { background: linear-gradient(135deg, $color-terracotta, #e8a060); color: #fff; }
+
+// ─── Forms ────────────────────────────────────────────────────────────────────
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  margin-bottom: $space-5;
+}
+
+label {
+  font-size: $text-sm;
+  font-weight: 600;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: $space-3 $space-4;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  background: $color-surface;
+  color: $color-text;
+  font-family: $font-sans;
+  font-size: $text-base;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $color-terracotta;
+    box-shadow: 0 0 0 3px rgba($color-terracotta, .12);
+  }
+
+  &::placeholder { color: $color-text-muted; }
+}
+
+textarea { resize: vertical; min-height: 100px; }
+
+// ─── Layout utilities ─────────────────────────────────────────────────────────
+.container { @include container; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap;
+}
+
+// ─── Cards ────────────────────────────────────────────────────────────────────
+.card { @include card; padding: $space-6; }
+
+// ─── Divider ──────────────────────────────────────────────────────────────────
+.divider {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: $space-6 0;
+}
+
+// ─── App shell ───────────────────────────────────────────────────────────────
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  padding-top: 64px; // header height
 }

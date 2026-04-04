@@ -12,7 +12,7 @@
 - `requirements/base.txt` and `requirements/development.txt` populated with all planned libraries
 - PostgreSQL connection configured via `DATABASE_URL` env var (SQLite fallback for local dev)
 - `GET /api/v1/health/` endpoint returning `{"status": "ok"}`
-- `django-cors-headers` installed and configured to allow `http://localhost:4200`
+- `django-cors-headers` installed and configured to allow `http://localhost:4411`
 - `.env.example` file listing every required environment variable
 - `Procfile` with `web: gunicorn config.wsgi`
 - `drf-spectacular` installed; Swagger UI available at `/api/schema/swagger-ui/`
@@ -24,9 +24,9 @@
 - All store files created as empty `@Injectable` signal stores: `auth.store.ts`, `recipe.store.ts`, `subscription.store.ts`, `ui.store.ts`
 - All facade files created as empty `@Injectable` classes: `auth.facade.ts`, `recipe.facade.ts`, `rating.facade.ts`, `comment.facade.ts`, `subscription.facade.ts`, `user.facade.ts`
 - All interceptors registered but no-op: `auth.interceptor.ts`, `error.interceptor.ts`
-- `environment.ts` with `apiUrl: 'http://localhost:8000/api/v1'`
-- `environment.prod.ts` with `apiUrl` placeholder
-- App compiles and serves at `http://localhost:4200` with a placeholder "Welcome to SoapMaker" message
+- `environment.ts` with `apiUrl: 'http://localhost:8811/api/v1'`
+- Basic `AppComponent` layout with placeholder styling
+- App compiles and serves at `http://localhost:4411` with a placeholder "Welcome to SoapMaker" message
 - `HttpClient` configured in `app.config.ts` with the two interceptors
 
 ### Shared
@@ -62,7 +62,7 @@ Register all five apps and all required third-party packages in `INSTALLED_APPS`
 ### Step 3 — Configure CORS and DRF
 In `base.py`:
 ```python
-CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:4411"]
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
@@ -135,22 +135,22 @@ Run: `ng build` and `ng test --watch=false`
 |---|---|---|
 | 1 | `ng build` | Compiles with 0 errors, 0 warnings |
 | 2 | `ng test --watch=false` | All generated spec files pass |
-| 3 | `ng serve` then open `http://localhost:4200` | App loads, no console errors |
+| 3 | `ng serve` then open `http://localhost:4411` | App loads, no console errors |
 | 4 | Network tab in browser | `GET /api/v1/health/` returns `{"status": "ok"}` |
 
 ### Manual Smoke Test
 1. Start backend: `python manage.py runserver`
 2. Start frontend: `ng serve`
-3. Open `http://localhost:4200` — "Welcome to SoapMaker" visible
-4. Open browser DevTools → Network tab → confirm `health` request is `200 OK`
-5. Open `http://localhost:8000/api/schema/swagger-ui/` — Swagger UI loads
+3. Open `http://localhost:4411` — "Welcome to SoapMaker" visible
+4. In another terminal, run backend: `python manage.py runserver 8811`
+5. Open `http://localhost:8811/api/schema/swagger-ui/` — Swagger UI loads
 
 ---
 
 ## Success Criteria
 - [ ] `ng build` produces no errors
 - [ ] `pytest` passes all health tests
-- [ ] Frontend app loads at `localhost:4200` with no console errors
+- [ ] Frontend app loads at `localhost:4411` with no console errors
 - [ ] Backend health endpoint returns `{"status":"ok"}`
 - [ ] Both processes can run simultaneously without port conflicts
 - [ ] All model, store, facade, and interceptor stub files exist and are importable

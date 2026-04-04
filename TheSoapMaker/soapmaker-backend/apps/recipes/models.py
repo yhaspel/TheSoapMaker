@@ -118,6 +118,7 @@ class Step(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="steps")
     order = models.PositiveIntegerField()
     instruction = models.TextField()
+    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
     image_url = models.URLField(max_length=500, blank=True)
 
     class Meta:
@@ -126,3 +127,24 @@ class Step(models.Model):
 
     def __str__(self) -> str:
         return f"Step {self.order} of {self.recipe.name}"
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='bookmarks',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='bookmarks',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'recipe')
+        ordering = ['-created_at']
+
+    def __str__(self) -> str:
+        return f'{self.user} bookmarked {self.recipe.name}'

@@ -1,26 +1,73 @@
-// Brand colours
-$color-primary:   #6b4226;   // warm brown
-$color-secondary: #d4a373;   // light tan
-$color-accent:    #a7c957;   // sage green
+// ─── Brand Palette ────────────────────────────────────────────────────────────
+$color-cream:       #fdf6ec;   // page background
+$color-cream-dark:  #f5ede0;   // card / surface background
+$color-terracotta:  #c1633a;   // primary action color
+$color-terracotta-dark: #a0512e; // hover state
+$color-sage:        #7a9b76;   // secondary / success accent
+$color-sage-light:  #d4e6d3;   // light sage tint
 
 // Neutrals
-$color-text:      #2d2d2d;
-$color-heading:   #1a1a1a;
-$color-bg:        #fefefe;
-$color-surface:   #f5f0eb;
-$color-border:    #e0d6cc;
+$color-text:        #2d2416;   // near-black warm
+$color-text-muted:  #7a6f5e;   // secondary text
+$color-heading:     #1a1208;   // darkest for headings
+$color-bg:          #fdf6ec;   // same as cream
+$color-surface:     #fff9f3;   // card surface
+$color-border:      #e5d9ca;   // soft border
+$color-border-dark: #cdbfab;
 
 // Semantic
-$color-success:   #2d9e5d;
-$color-error:     #c0392b;
-$color-info:      #2980b9;
+$color-success:     #3a8c5c;
+$color-error:       #c0392b;
+$color-info:        #2980b9;
+$color-warning:     #e67e22;
 
-// Layout
-$max-width:       1200px;
-$spacing-unit:    8px;
+// Star colors
+$color-star-filled: #f4a800;
+$color-star-empty:  #d6cfc4;
 
-// Breakpoints
+// ─── Typography ───────────────────────────────────────────────────────────────
+$font-serif:    'Georgia', 'Times New Roman', serif;   // headings
+$font-sans:     'Inter', 'Segoe UI', system-ui, sans-serif;  // body
+$font-mono:     'Courier New', monospace;
+
+$text-xs:    0.75rem;   //  12px
+$text-sm:    0.875rem;  //  14px
+$text-base:  1rem;      //  16px
+$text-lg:    1.125rem;  //  18px
+$text-xl:    1.25rem;   //  20px
+$text-2xl:   1.5rem;    //  24px
+$text-3xl:   1.875rem;  //  30px
+$text-4xl:   2.25rem;   //  36px
+$text-5xl:   3rem;      //  48px
+
+// ─── Spacing ──────────────────────────────────────────────────────────────────
+$space-1:  0.25rem;   //  4px
+$space-2:  0.5rem;    //  8px
+$space-3:  0.75rem;   // 12px
+$space-4:  1rem;      // 16px
+$space-5:  1.25rem;   // 20px
+$space-6:  1.5rem;    // 24px
+$space-8:  2rem;      // 32px
+$space-10: 2.5rem;    // 40px
+$space-12: 3rem;      // 48px
+$space-16: 4rem;      // 64px
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+$max-width:      1200px;
+$content-width:  960px;
+$border-radius:  8px;
+$border-radius-lg: 16px;
+$shadow-sm:  0 1px 3px rgba(0,0,0,.08);
+$shadow-md:  0 4px 12px rgba(0,0,0,.10);
+$shadow-lg:  0 8px 24px rgba(0,0,0,.12);
+
+// ─── Breakpoints ──────────────────────────────────────────────────────────────
 $bp-sm:  576px;
 $bp-md:  768px;
 $bp-lg:  992px;
 $bp-xl:  1200px;
+
+// ─── Transitions ──────────────────────────────────────────────────────────────
+$transition-fast:   150ms ease;
+$transition-base:   250ms ease;
+$transition-slow:   400ms ease;

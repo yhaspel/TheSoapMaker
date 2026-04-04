@@ -8,10 +8,12 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from drf_spectacular.utils import extend_schema
 
 from .filters import RecipeFilter
-from .models import Ingredient, Recipe, RecipeIngredient
+from .models import Ingredient, Recipe, RecipeIngredient, Bookmark
 from .permissions import IsAuthorOrReadOnly
+from django.shortcuts import get_object_or_404
 from .serializers import (
     IngredientSerializer,
     RecipeDetailSerializer,
@@ -189,4 +191,51 @@ class CloudinaryUploadPresignView(APIView):
                 "signature": signature,
                 "folder": folder,
             }
+        )
+
+
+class BookmarkToggleView(APIView):
+    """
+    POST /api/v1/recipes/{slug}/bookmark/  — toggle bookmark on/off
+    Returns 201 {"bookmarked": true} when added, 204 when removed.
+    """
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary="Toggle recipe bookmark",
+        description="Adds bookmark (201) or removes it (204).",
+        responses={201: None, 204: None},
+        tags=["recipes"],
+    )
+    def post(self, request, slug):
+        recipe = get_object_or_404(Recipe, slug=slug)
+        bookmark, created = Bookmark.objects.get_or_create(
+            user=request.user, recipe=recipe
+        )
+        if not created:
+            bookmark.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'bookmarked': True, 'slug': slug}, status=status.HTTP_201_CREATED)
+
+
+class BookmarkedRecipesView(generics.ListAPIView):
+    """GET /api/v1/recipes/bookmarked/  — current user's bookmarked recipes"""
+    serializer_class = RecipeListSerializer
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary="List bookmarked recipes",
+        description="Returns all recipes bookmarked by the authenticated user.",
+        responses={200: RecipeListSerializer(many=True)},
+        tags=["recipes"],
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return (
+            Recipe.objects.filter(bookmarks__user=self.request.user)
+            .select_related('author')
+            .prefetch_related('tags')
+            .order_by('-bookmarks__created_at')
         )

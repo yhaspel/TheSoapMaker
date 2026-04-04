@@ -161,7 +161,7 @@ Add `canActivate: [authGuard]` to protected routes and `canActivate: [premiumGua
 ## Test Plan
 
 ### Prerequisites
-Backend must be running at `http://localhost:8000` with Milestone 2 complete.
+Backend must be running at `http://localhost:8811` with Milestone 2 complete.
 
 ### Unit Tests (no backend required — use `HttpTestingController`)
 Run: `ng test --watch=false`

@@ -204,7 +204,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # CORS
 # ---------------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:4200"
+    "CORS_ALLOWED_ORIGINS", "http://localhost:4411"
 ).split(",")
 
 # ---------------------------------------------------------------------------

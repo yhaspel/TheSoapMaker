@@ -1,5 +1,5 @@
 export type SubscriptionPlan = 'free' | 'premium_monthly' | 'premium_annual';
-export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'trialing';
+export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'trialing' | 'free';
 
 export interface Subscription {
   id: string;
@@ -7,4 +7,5 @@ export interface Subscription {
   status: SubscriptionStatus;
   currentPeriodEnd: string | null;
   cancelAtPeriodEnd: boolean;
+  trialDaysRemaining: number | null;
 }

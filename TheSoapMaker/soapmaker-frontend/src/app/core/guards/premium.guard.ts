@@ -1,14 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthStore } from '../store/auth.store';
+import { SubscriptionFacade } from '../../abstraction/subscription.facade';
 
 export const premiumGuard: CanActivateFn = () => {
-  const authStore = inject(AuthStore);
+  const subFacade = inject(SubscriptionFacade);
   const router = inject(Router);
-
-  if (authStore.isPremium()) {
-    return true;
-  }
-
+  if (subFacade.isPremium()) return true;
   return router.createUrlTree(['/premium/pricing']);
 };

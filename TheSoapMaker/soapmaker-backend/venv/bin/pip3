@@ -1,8 +1,8 @@
-#!/sessions/serene-quirky-shannon/mnt/TheSoapMaker/soapmaker-backend/venv/bin/python3
-# -*- coding: utf-8 -*-
-import re
+#!/bin/sh
+'''exec' "/Users/yuval3000/Claude Projects/The Soap Maker/TheSoapMaker/soapmaker-backend/venv/bin/python3.11" "$0" "$@"
+' '''
 import sys
 from pip._internal.cli.main import main
 if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
     sys.exit(main())

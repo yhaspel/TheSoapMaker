@@ -25,7 +25,8 @@ A community-driven web application for homemade soap crafting enthusiasts.
 cd soapmaker-backend
 
 # 1. Create and activate a virtual environment
-python -m venv venv
+# (Note: Django 5 requires Python 3.10+, if you don't have it on Mac: brew install python@3.11)
+python3.11 -m venv venv
 source venv/bin/activate          # Windows: venv\Scripts\activate
 
 # 2. Install dependencies

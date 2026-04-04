@@ -1,0 +1,19 @@
+@use 'variables' as *;
+
+@mixin respond-to($bp) {
+  @media (min-width: $bp) { @content; }
+}
+
+@mixin card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  padding: $spacing-unit * 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

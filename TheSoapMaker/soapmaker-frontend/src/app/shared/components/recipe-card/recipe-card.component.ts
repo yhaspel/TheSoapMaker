@@ -83,7 +83,7 @@ import { SubscriptionFacade } from '../../../abstraction/subscription.facade';
     .recipe-card__author { display: flex; align-items: center; gap: .375rem; font-size: .8rem; color: #7a6f5e; text-decoration: none; }
     .recipe-card__author-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
     .recipe-card__actions { display: flex; align-items: center; gap: .375rem; }
-    .recipe-card__bookmark { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: .25rem; color: #cdbfab; transition: color .1s, transform .1s; &--active { color: #c1633a; } &:hover { transform: scale(1.2); } }
+    .recipe-card__bookmark { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: .25rem; color: #cdbfab; transition: color .1s, transform .1s; &.recipe-card__bookmark--active { color: #c1633a; } &:hover { transform: scale(1.2); } }
   `],
 })
 export class RecipeCardComponent {

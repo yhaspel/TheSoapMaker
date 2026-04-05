@@ -17,19 +17,27 @@ import { AuthFacade } from '../../../abstraction/auth.facade';
           @if (facade.isAuthenticated()) {
             <a routerLink="/recipes/my-recipes" routerLinkActive="active">My Recipes</a>
           }
+          <a routerLink="/calculator" routerLinkActive="active">Lye Calculator</a>
           <a routerLink="/premium/pricing" routerLinkActive="active">Pricing</a>
         </nav>
 
         <div class="header__user">
           @if (facade.isAuthenticated()) {
             <button class="header__avatar-btn" (click)="toggleMenu()" aria-haspopup="true" [attr.aria-expanded]="menuOpen()">
-              <img
-                [src]="facade.currentUser()?.avatarUrl || 'https://i.pravatar.cc/40'"
-                [alt]="facade.currentUser()?.displayName || 'User'"
-                class="header__avatar"
-                width="36" height="36"
-              />
-              <span class="header__name">{{ facade.currentUser()?.displayName }}</span>
+              @if (facade.currentUser()?.avatarUrl) {
+                <img
+                  [src]="facade.currentUser()!.avatarUrl"
+                  [alt]="facade.currentUser()?.displayName || 'User'"
+                  class="header__avatar"
+                  width="36" height="36"
+                  loading="lazy"
+                />
+              } @else {
+                <span class="header__avatar header__avatar--initials" aria-hidden="true">
+                  {{ headerInitials() }}
+                </span>
+              }
+              <span class="header__name">{{ facade.currentUser()?.displayName || 'Account' }}</span>
             </button>
             @if (menuOpen()) {
               <div class="header__dropdown" role="menu">
@@ -80,7 +88,16 @@ import { AuthFacade } from '../../../abstraction/auth.facade';
       transition: background .15s;
       &:hover { background: #f5ede0; }
     }
-    .header__avatar { border-radius: 50%; object-fit: cover; }
+    .header__avatar {
+      border-radius: 50%; object-fit: cover;
+      &--initials {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 36px; height: 36px;
+        background: #c1633a; color: #fff;
+        font-size: .75rem; font-weight: 700;
+        border-radius: 50%; flex-shrink: 0;
+      }
+    }
     .header__name { font-size: .875rem; font-weight: 600; color: #2d2416; }
     .header__dropdown {
       position: absolute; top: calc(100% + 8px); right: 0;
@@ -113,6 +130,13 @@ import { AuthFacade } from '../../../abstraction/auth.facade';
 export class HeaderComponent {
   facade = inject(AuthFacade);
   menuOpen = signal(false);
+
+  headerInitials(): string {
+    const name = this.facade.currentUser()?.displayName ?? '';
+    if (!name) return '?';
+    return name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
+  }
+
   toggleMenu() { this.menuOpen.update(v => !v); }
   closeMenu() { this.menuOpen.set(false); }
   logout() { this.closeMenu(); this.facade.logout(); }

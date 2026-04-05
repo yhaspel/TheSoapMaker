@@ -85,7 +85,7 @@ import { LyeCalculatorComponent } from '../../../shared/components/lye-calculato
             }
 
             <!-- Ingredients table -->
-            @if (recipe.ingredients?.length) {
+            @if (recipe.ingredients.length) {
               <section class="section">
                 <h2>Ingredients</h2>
                 <table class="ingredients-table">
@@ -120,7 +120,7 @@ import { LyeCalculatorComponent } from '../../../shared/components/lye-calculato
             }
 
             <!-- Steps -->
-            @if (recipe.steps?.length) {
+            @if (recipe.steps.length) {
               <section class="section">
                 <h2>Method</h2>
                 <ol class="steps-list">

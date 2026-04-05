@@ -31,10 +31,10 @@ export interface RecipePayload {
   description: string;
   method: string;
   difficulty: string;
-  cureTimeDays: number;
-  batchSizeGrams: number;
-  yieldBars: number;
-  imageUrl?: string;
+  cureTimeDays?: number | undefined;
+  batchSizeGrams?: number | undefined;
+  yieldBars?: number | undefined;
+  imageUrl?: string | undefined;
   isPublished: boolean;
   tagNames?: string[];
   ingredients?: {
@@ -64,7 +64,7 @@ function mapRecipe(r: Record<string, unknown>): Recipe {
     ingredient: {
       id: ri['ingredient_id'] as string ?? (ri['ingredient'] as Record<string, unknown>)?.['id'] as string,
       name: (ri['ingredient'] as Record<string, unknown>)?.['name'] as string ?? ri['ingredient_name'] as string ?? '',
-      category: (ri['ingredient'] as Record<string, unknown>)?.['category'] as string ?? '',
+      category: (ri['ingredient'] as Record<string, unknown>)?.['category'] as any ?? '',
       saponificationValue: (ri['ingredient'] as Record<string, unknown>)?.['saponification_value'] as number | null ?? null,
       description: (ri['ingredient'] as Record<string, unknown>)?.['description'] as string ?? '',
     },

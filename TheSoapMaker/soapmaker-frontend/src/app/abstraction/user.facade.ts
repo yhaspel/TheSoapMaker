@@ -35,6 +35,17 @@ export class UserFacade {
     });
   }
 
+  uploadAvatar(file: File): void {
+    this.userService.uploadAvatar(file).subscribe({
+      next: ({ avatar_url }) => {
+        const user = this.authStore.currentUser();
+        if (user) this.authStore.setCurrentUser({ ...user, avatarUrl: avatar_url });
+        this.uiStore.addToast('Profile photo updated!', 'success');
+      },
+      error: () => this.uiStore.addToast('Failed to upload photo. Please try again.', 'error'),
+    });
+  }
+
   loadUserRecipes(): void {
     this.recipeService.getMyRecipes().subscribe({
       next: (recipes) => this.recipeStore.setMyRecipes(recipes),

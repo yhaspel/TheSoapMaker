@@ -89,7 +89,7 @@ export class LoginComponent {
   showPassword = signal(false);
 
   socialLogin(provider: string): void {
-    window.location.href = `${environment.apiUrl}/auth/${provider}/`;
+    window.location.href = `${environment.apiUrl}/auth/${provider}/login/`;
   }
 
   onLogin(): void {

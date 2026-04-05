@@ -98,7 +98,7 @@ import { RecipeIngredient } from '../../../core/models/recipe.model';
     .lye-calc__controls { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-bottom: 1.5rem; }
     .lye-calc__control { display: flex; flex-direction: column; gap: .375rem; label { font-size: .78rem; font-weight: 600; color: #7a6f5e; text-transform: uppercase; } }
     .lye-toggle { display: flex; border: 1px solid #e5d9ca; border-radius: 6px; overflow: hidden; }
-    .lye-toggle__btn { padding: .375rem .875rem; border: none; background: #fdf6ec; color: #7a6f5e; cursor: pointer; font-size: .85rem; transition: all .1s; &--active { background: #c1633a; color: #fff; } }
+    .lye-toggle__btn { padding: .375rem .875rem; border: none; background: #fdf6ec; color: #7a6f5e; cursor: pointer; font-size: .85rem; transition: all .1s; &.lye-toggle__btn--active { background: #c1633a; color: #fff; } }
     input[type="range"] { width: 140px; accent-color: #c1633a; }
     select { padding: .375rem .625rem; border: 1px solid #e5d9ca; border-radius: 6px; background: #fdf6ec; font-size: .85rem; color: #2d2416; }
     .lye-calc__oils { margin-bottom: 1.5rem; h4 { font-size: .9rem; color: #7a6f5e; text-transform: uppercase; font-weight: 600; margin-bottom: .75rem; } }

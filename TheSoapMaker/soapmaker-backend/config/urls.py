@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
+from apps.users.urls import users_urlpatterns
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework_simplejwt.views import TokenRefreshView
+from allauth.urls import build_provider_urlpatterns
 
 
 @api_view(["GET"])
@@ -41,17 +44,21 @@ urlpatterns = [
     # GET/PUT /api/v1/auth/user/          — own profile (custom view)
     path("api/v1/auth/", include("apps.users.urls")),
 
+    # POST /api/v1/users/avatar/          — profile photo upload
+    path("api/v1/users/", include((users_urlpatterns, "users"))),
+
     # POST /api/v1/auth/token/refresh/    — refresh access token
     path(
         "api/v1/auth/token/refresh/",
-        include("rest_framework_simplejwt.urls"),
+        TokenRefreshView.as_view(), name="token_refresh"
     ),
 
     # Social OAuth redirects (allauth)
-    # GET /api/v1/auth/google/
-    # GET /api/v1/auth/facebook/
-    # GET /api/v1/auth/twitter/
+    # GET /api/v1/auth/google/login/
+    # GET /api/v1/auth/facebook/login/
+    # GET /api/v1/auth/twitter/login/
     path("api/v1/auth/", include("allauth.socialaccount.urls")),
+    path("api/v1/auth/", include(build_provider_urlpatterns())),
 
     # -----------------------------------------------------------------------
     # App APIs (to be expanded in later milestones)

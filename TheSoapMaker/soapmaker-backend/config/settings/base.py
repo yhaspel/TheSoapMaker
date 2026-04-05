@@ -145,7 +145,7 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,  # Angular needs to read the refresh token
     "USER_DETAILS_SERIALIZER": "apps.users.serializers.UserSerializer",
-    "REGISTER_SERIALIZER": "dj_rest_auth.registration.serializers.RegisterSerializer",
+    "REGISTER_SERIALIZER": "apps.users.serializers.CustomRegisterSerializer",
 }
 
 # ---------------------------------------------------------------------------
@@ -160,13 +160,13 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Custom adapter that wires up the trial on account creation
 ACCOUNT_ADAPTER = "apps.users.adapters.CustomAccountAdapter"
+
+LOGIN_REDIRECT_URL = "http://localhost:4411/"
+
 
 # ---------------------------------------------------------------------------
 # Social OAuth provider config (credentials from .env)

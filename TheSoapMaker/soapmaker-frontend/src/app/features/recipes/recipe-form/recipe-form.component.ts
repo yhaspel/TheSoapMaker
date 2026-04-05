@@ -42,21 +42,21 @@ const DRAFT_KEY = 'sm_recipe_draft';
           <h2>Basic Information</h2>
           <div class="form-grid">
             <div class="form-group full">
-              <label for="name">Recipe Name *</label>
+              <label for="name">Recipe Name <span class="req">*</span></label>
               <input id="name" type="text" formControlName="name" placeholder="e.g. Lavender Dream Bar" />
               @if (basicForm.get('name')?.invalid && basicForm.get('name')?.touched) {
                 <span class="field-error">Name must be at least 3 characters</span>
               }
             </div>
             <div class="form-group full">
-              <label for="desc">Description *</label>
+              <label for="desc">Description <span class="req">*</span></label>
               <textarea id="desc" formControlName="description" rows="4" placeholder="Describe your soap recipe…"></textarea>
               @if (basicForm.get('description')?.invalid && basicForm.get('description')?.touched) {
                 <span class="field-error">Description must be at least 20 characters</span>
               }
             </div>
             <div class="form-group">
-              <label for="method">Method *</label>
+              <label for="method">Method <span class="req">*</span></label>
               <select id="method" formControlName="method">
                 <option value="">Select method…</option>
                 <option value="cold_process">Cold Process</option>
@@ -64,30 +64,32 @@ const DRAFT_KEY = 'sm_recipe_draft';
                 <option value="melt_and_pour">Melt & Pour</option>
                 <option value="liquid">Liquid</option>
               </select>
+              @if (basicForm.get('method')?.invalid && basicForm.get('method')?.touched) {
+                <span class="field-error">Please select a method</span>
+              }
             </div>
             <div class="form-group">
-              <label for="difficulty">Difficulty *</label>
+              <label for="difficulty">Difficulty <span class="req">*</span></label>
               <select id="difficulty" formControlName="difficulty">
-                <option value="">Select difficulty…</option>
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="cure">Cure Time (days) *</label>
-              <input id="cure" type="number" formControlName="cureTimeDays" min="1" placeholder="28" />
+              <label for="cure">Cure Time (days)</label>
+              <input id="cure" type="number" formControlName="cureTimeDays" min="1" placeholder="e.g. 28" />
             </div>
             <div class="form-group">
-              <label for="batch">Batch Size (g) *</label>
-              <input id="batch" type="number" formControlName="batchSizeGrams" min="1" placeholder="500" />
+              <label for="batch">Batch Size (g)</label>
+              <input id="batch" type="number" formControlName="batchSizeGrams" min="1" placeholder="e.g. 500" />
             </div>
             <div class="form-group">
               <label for="yield">Yield (bars)</label>
-              <input id="yield" type="number" formControlName="yieldBars" min="1" placeholder="8" />
+              <input id="yield" type="number" formControlName="yieldBars" min="1" placeholder="e.g. 8" />
             </div>
             <div class="form-group full">
-              <label for="tags">Tags (comma-separated)</label>
+              <label for="tags">Tags <span class="optional">(comma-separated)</span></label>
               <input id="tags" type="text" formControlName="tagNames" placeholder="lavender, moisturising, vegan" />
             </div>
           </div>
@@ -137,18 +139,78 @@ const DRAFT_KEY = 'sm_recipe_draft';
       <!-- Step 3: Steps -->
       @if (currentStep() === 3) {
         <div class="form-panel">
-          <h2>Method Steps</h2>
-          <p class="form-panel__hint">Describe each step in order.</p>
-          <div class="steps-list" [formArray]="stepsArray">
+          <h2>Method Steps <span class="req">*</span></h2>
+          <p class="form-panel__hint">Build your recipe steps in order. Click <strong>✏️ Edit</strong> to fill in any step, or <strong>✕</strong> to remove it.</p>
+
+          <div class="steps-builder" [formArray]="stepsArray">
             @for (ctrl of stepsArray.controls; track $index; let i = $index) {
-              <div class="step-row" [formGroupName]="i">
-                <div class="step-num">{{ i + 1 }}</div>
-                <textarea formControlName="instruction" rows="2" [placeholder]="'Step ' + (i+1) + ' instructions…'"></textarea>
-                <input type="number" formControlName="durationMinutes" placeholder="Min" min="1" class="duration-input" />
-                <button type="button" class="remove-btn" (click)="removeStep(i)" aria-label="Remove step">✕</button>
+              <div class="step-card" [formGroupName]="i" [class.step-card--editing]="editingStepIndex() === i">
+
+                <!-- Step number badge -->
+                <div class="step-badge">{{ i + 1 }}</div>
+
+                <!-- Body: view mode -->
+                @if (editingStepIndex() !== i) {
+                  <div class="step-card__view">
+                    <p class="step-card__text">
+                      {{ ctrl.get('instruction')?.value || 'No instruction yet — click ✏️ Edit to fill in this step.' }}
+                    </p>
+                    @if (ctrl.get('durationMinutes')?.value) {
+                      <span class="step-duration-chip">⏱ {{ ctrl.get('durationMinutes')?.value }} min</span>
+                    }
+                  </div>
+                  <div class="step-card__actions">
+                    <button type="button" class="icon-btn icon-btn--edit" (click)="startEditStep(i)" title="Edit step">
+                      ✏️ Edit
+                    </button>
+                    <button type="button" class="icon-btn icon-btn--remove" (click)="removeStep(i)" title="Remove step" aria-label="Remove step">
+                      ✕
+                    </button>
+                  </div>
+
+                <!-- Body: edit mode -->
+                } @else {
+                  <div class="step-card__edit">
+                    <textarea
+                      formControlName="instruction"
+                      rows="3"
+                      [placeholder]="'Step ' + (i + 1) + ' — describe what to do…'"
+                      class="step-textarea"
+                    ></textarea>
+                    @if (ctrl.get('instruction')?.invalid && ctrl.get('instruction')?.touched) {
+                      <span class="field-error">Instruction cannot be empty</span>
+                    }
+                    <div class="step-edit-footer">
+                      <div class="duration-field">
+                        <label [for]="'dur-' + i">Duration (min) <span class="optional">optional</span></label>
+                        <input
+                          [id]="'dur-' + i"
+                          type="number"
+                          formControlName="durationMinutes"
+                          placeholder="e.g. 15"
+                          min="1"
+                          class="duration-input"
+                        />
+                      </div>
+                      <div class="step-edit-btns">
+                        <button type="button" class="icon-btn icon-btn--remove" (click)="removeStep(i)">✕ Remove</button>
+                        <button type="button" class="btn-done" (click)="doneEditStep(i)">✓ Done</button>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+              </div>
+            }
+
+            @if (stepsArray.length === 0) {
+              <div class="steps-empty">
+                <span class="steps-empty__icon">📋</span>
+                <p>No steps yet. Click <strong>"+ Add Step"</strong> to get started.</p>
               </div>
             }
           </div>
+
           <button type="button" class="add-btn" (click)="addStep()">+ Add Step</button>
         </div>
       }
@@ -162,9 +224,13 @@ const DRAFT_KEY = 'sm_recipe_draft';
             <p>{{ basicForm.value.description || 'No description yet.' }}</p>
             <div class="preview-meta">
               <span class="badge badge-method">{{ basicForm.value.method || 'method TBD' }}</span>
-              <span class="badge badge-difficulty-{{ basicForm.value.difficulty }}">{{ basicForm.value.difficulty || 'difficulty TBD' }}</span>
-              <span>{{ basicForm.value.cureTimeDays || '?' }} days cure</span>
-              <span>{{ basicForm.value.batchSizeGrams || '?' }}g → {{ basicForm.value.yieldBars || '?' }} bars</span>
+              <span class="badge badge-difficulty-{{ basicForm.value.difficulty }}">{{ basicForm.value.difficulty }}</span>
+              @if (basicForm.value.cureTimeDays) {
+                <span>{{ basicForm.value.cureTimeDays }} days cure</span>
+              }
+              @if (basicForm.value.batchSizeGrams) {
+                <span>{{ basicForm.value.batchSizeGrams }}g{{ basicForm.value.yieldBars ? ' → ' + basicForm.value.yieldBars + ' bars' : '' }}</span>
+              }
             </div>
             <p><strong>Ingredients:</strong> {{ ingredientsArray.length }} added</p>
             <p><strong>Steps:</strong> {{ stepsArray.length }} added</p>
@@ -247,12 +313,81 @@ const DRAFT_KEY = 'sm_recipe_draft';
     .ing-name { font-weight: 600; font-size: .9rem; }
     .empty-hint { color: #7a6f5e; font-size: .9rem; text-align: center; padding: 1.5rem; }
 
-    .steps-list { display: flex; flex-direction: column; gap: .875rem; margin-bottom: 1rem; }
-    .step-row { display: grid; grid-template-columns: 36px 1fr 80px auto; gap: .5rem; align-items: flex-start; }
-    .step-num { width: 36px; height: 36px; border-radius: 50%; background: #c1633a; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .duration-input { width: 80px; }
+    /* ── Step builder ─────────────────────────────────────────── */
+    .steps-builder { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 1.25rem; }
+
+    .step-card {
+      display: flex; gap: .875rem; align-items: flex-start;
+      background: #fff; border: 1.5px solid #e5d9ca; border-radius: 10px; padding: .875rem 1rem;
+      transition: border-color .15s, box-shadow .15s;
+      &--editing { border-color: #c1633a; box-shadow: 0 0 0 3px rgba(193,99,58,.1); }
+    }
+
+    .step-badge {
+      width: 32px; height: 32px; border-radius: 50%; background: #c1633a; color: #fff;
+      font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: .125rem;
+    }
+
+    .step-card__view { flex: 1; min-width: 0; }
+    .step-card__text {
+      font-size: .925rem; color: #2d2416; line-height: 1.55; margin: 0;
+      white-space: pre-wrap; word-break: break-word;
+      &:empty, &.placeholder { color: #a89e90; font-style: italic; }
+    }
+    .step-duration-chip {
+      display: inline-block; margin-top: .375rem; font-size: .78rem; color: #7a6f5e;
+      background: #f5ede0; padding: 2px 8px; border-radius: 20px;
+    }
+
+    .step-card__actions {
+      display: flex; gap: .375rem; flex-shrink: 0; align-items: flex-start; margin-top: .125rem;
+    }
+
+    .icon-btn {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .3rem .625rem; border-radius: 6px; font-size: .8rem; font-weight: 600; cursor: pointer;
+      border: 1.5px solid transparent; transition: all .15s;
+      &--edit {
+        color: #c1633a; border-color: #e5d9ca; background: #fdf6ec;
+        &:hover { border-color: #c1633a; background: rgba(193,99,58,.08); }
+      }
+      &--remove {
+        color: #c0392b; border-color: #fde8e8; background: #fff;
+        &:hover { border-color: #c0392b; background: #fde8e8; }
+      }
+    }
+
+    .step-card__edit { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .75rem; }
+    .step-textarea { width: 100%; resize: vertical; min-height: 80px; }
+
+    .step-edit-footer {
+      display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .75rem;
+    }
+    .duration-field {
+      display: flex; flex-direction: column; gap: .3rem;
+      label { font-size: .75rem; font-weight: 600; color: #7a6f5e; text-transform: uppercase; letter-spacing: .04em; }
+    }
+    .duration-input { width: 90px; }
+    .step-edit-btns { display: flex; gap: .5rem; align-items: center; }
+
+    .btn-done {
+      padding: .4rem .875rem; background: #c1633a; color: #fff; border: none; border-radius: 6px;
+      font-weight: 600; font-size: .85rem; cursor: pointer;
+      &:hover { background: #a0512e; }
+    }
+
+    .steps-empty {
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      padding: 2rem 1rem; border: 2px dashed #e5d9ca; border-radius: 10px; color: #7a6f5e; text-align: center;
+    }
+    .steps-empty__icon { font-size: 2rem; }
+
     .remove-btn { background: none; border: 1px solid #e5d9ca; border-radius: 4px; color: #c0392b; cursor: pointer; padding: .25rem .5rem; &:hover { background: #fde8e8; } }
     .add-btn { background: none; border: 2px dashed #e5d9ca; border-radius: 6px; color: #c1633a; font-weight: 600; padding: .625rem 1.25rem; cursor: pointer; width: 100%; &:hover { border-color: #c1633a; background: rgba(193,99,58,.04); } }
+
+    .req { color: #c0392b; }
+    .optional { color: #a89e90; font-weight: 400; text-transform: none; font-size: .78rem; margin-left: .25rem; }
 
     .preview-card { padding: 1.5rem; background: #fdf6ec; border-radius: 8px; margin-bottom: 1.5rem; h3 { margin-bottom: .5rem; } }
     .preview-meta { display: flex; gap: .75rem; flex-wrap: wrap; margin: 1rem 0; align-items: center; font-size: .875rem; color: #7a6f5e; }
@@ -302,6 +437,8 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   imageUploading = signal(false);
   imageUrl = signal('');
   draftSavedAt = signal<string | null>(null);
+  /** Index of the step currently open in edit mode, or null if none. */
+  editingStepIndex = signal<number | null>(null);
 
   private ingredientSearch$ = new Subject<string>();
   private subs = new Subscription();
@@ -311,10 +448,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     name: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', [Validators.required, Validators.minLength(20)]],
     method: ['', Validators.required],
-    difficulty: ['', Validators.required],
-    cureTimeDays: [28, [Validators.required, Validators.min(1)]],
-    batchSizeGrams: [500, [Validators.required, Validators.min(1)]],
-    yieldBars: [8, Validators.min(1)],
+    difficulty: ['intermediate', Validators.required],   // default: Intermediate
+    cureTimeDays: [null as number | null, Validators.min(1)],   // optional
+    batchSizeGrams: [null as number | null, Validators.min(1)], // optional
+    yieldBars: [null as number | null, Validators.min(1)],      // optional
     tagNames: [''],
     isPublished: [true],
   });
@@ -448,11 +585,32 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.stepsArray.push(this.fb.group({
       order: [this.stepsArray.length + 1],
       instruction: ['', Validators.required],
-      durationMinutes: [null],
+      durationMinutes: [null as number | null],
     }));
+    // Auto-open the new step in edit mode
+    this.editingStepIndex.set(this.stepsArray.length - 1);
   }
 
-  removeStep(i: number): void { this.stepsArray.removeAt(i); }
+  removeStep(i: number): void {
+    this.stepsArray.removeAt(i);
+    const editing = this.editingStepIndex();
+    if (editing === i) {
+      this.editingStepIndex.set(null);
+    } else if (editing !== null && editing > i) {
+      this.editingStepIndex.update(v => v! - 1);
+    }
+  }
+
+  startEditStep(i: number): void {
+    this.editingStepIndex.set(i);
+  }
+
+  doneEditStep(i: number): void {
+    const ctrl = this.stepsArray.at(i);
+    ctrl.get('instruction')?.markAsTouched();
+    if (ctrl.get('instruction')?.invalid) return; // keep open until filled in
+    this.editingStepIndex.set(null);
+  }
 
   next(): void {
     this.validationError.set(null);
@@ -463,13 +621,19 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    if (this.currentStep() === 2 && this.ingredientsArray.length === 0) {
-      this.validationError.set('Please add at least one ingredient.');
-      return;
-    }
-    if (this.currentStep() === 3 && this.stepsArray.length === 0) {
-      this.validationError.set('Please add at least one step.');
-      return;
+    if (this.currentStep() === 3) {
+      // Close any open edit before moving on
+      this.editingStepIndex.set(null);
+      if (this.stepsArray.length === 0) {
+        this.validationError.set('Please add at least one step before continuing.');
+        return;
+      }
+      // Validate all step instructions are filled
+      const hasEmptyStep = this.stepsArray.controls.some(c => !c.get('instruction')?.value?.trim());
+      if (hasEmptyStep) {
+        this.validationError.set('All steps must have an instruction. Click ✏️ Edit on any empty step to fill it in.');
+        return;
+      }
     }
     if (this.currentStep() < 4) this.currentStep.update(s => s + 1);
   }
@@ -501,10 +665,10 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       name: v.name ?? '',
       description: v.description ?? '',
       method: v.method ?? '',
-      difficulty: v.difficulty ?? '',
-      cureTimeDays: Number(v.cureTimeDays ?? 28),
-      batchSizeGrams: Number(v.batchSizeGrams ?? 500),
-      yieldBars: Number(v.yieldBars ?? 1),
+      difficulty: v.difficulty ?? 'intermediate',
+      cureTimeDays: v.cureTimeDays ? Number(v.cureTimeDays) : undefined,
+      batchSizeGrams: v.batchSizeGrams ? Number(v.batchSizeGrams) : undefined,
+      yieldBars: v.yieldBars ? Number(v.yieldBars) : undefined,
       imageUrl: this.imageUrl() || undefined,
       isPublished: v.isPublished ?? true,
       tagNames,

@@ -139,12 +139,13 @@ class RecipeIngredientListView(generics.ListAPIView):
 # ---------------------------------------------------------------------------
 
 class IngredientListView(generics.ListAPIView):
-    """GET /api/v1/ingredients/  — full ingredient catalogue (public)"""
-    queryset = Ingredient.objects.all()
+    """GET /api/v1/ingredients/  — full ingredient catalogue (public, unpaginated for autocomplete)"""
+    queryset = Ingredient.objects.all().order_by("name")
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter]
     search_fields = ["name", "category"]
+    pagination_class = None  # autocomplete needs a plain array, not a paginated envelope
 
 
 class IngredientDetailView(generics.RetrieveAPIView):

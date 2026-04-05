@@ -175,7 +175,7 @@ import { AdBannerComponent } from '../../../shared/components/ad-banner/ad-banne
       padding: .25rem .625rem; border: 1px solid #e5d9ca; border-radius: 20px;
       font-size: .78rem; background: #fdf6ec; color: #7a6f5e; cursor: pointer;
       transition: all .15s;
-      &--active, &:hover { background: #c1633a; color: #fff; border-color: #c1633a; }
+      &.tag-btn--active, &:hover { background: #c1633a; color: #fff; border-color: #c1633a; }
     }
     .clear-btn {
       width: 100%; padding: .5rem; border: none; background: none;

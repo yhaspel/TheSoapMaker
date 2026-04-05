@@ -42,7 +42,7 @@ export class AuthFacade {
           this.authStore.setLoading(false);
         },
       }),
-    ) as Observable<void>;
+    ) as unknown as Observable<void>;
   }
 
   register(email: string, password: string, displayName: string): Observable<void> {
@@ -71,7 +71,7 @@ export class AuthFacade {
           this.authStore.setLoading(false);
         },
       }),
-    ) as Observable<void>;
+    ) as unknown as Observable<void>;
   }
 
   logout(): void {

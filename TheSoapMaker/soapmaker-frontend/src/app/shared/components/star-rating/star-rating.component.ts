@@ -57,7 +57,7 @@ export class StarRatingComponent {
   @Output() ratingChange = new EventEmitter<number>();
 
   stars = [1, 2, 3, 4, 5];
-  private hoveredStar = signal(0);
+  hoveredStar = signal(0);
 
   displayRating = computed(() => {
     if (this.hoveredStar()) return this.hoveredStar();

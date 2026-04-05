@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { RecipeFacade } from '../../../abstraction/recipe.facade';
 import { AuthFacade } from '../../../abstraction/auth.facade';
 import { CureTimePipe } from '../../../shared/pipes/cure-time.pipe';
+import { SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-my-recipes',
   standalone: true,
-  imports: [RouterLink, CureTimePipe],
+  imports: [RouterLink, CureTimePipe, SlicePipe],
   template: `
     <div class="my-recipes container">
       <div class="page-header">
@@ -102,7 +103,7 @@ import { CureTimePipe } from '../../../shared/pipes/cure-time.pipe';
     .badge-difficulty-advanced { background: #fde8e8; color: #8b1a1a; }
     .rating-cell { font-size: .9rem; }
     .status-badge { padding: .25rem .625rem; border-radius: 20px; font-size: .75rem; font-weight: 600; background: #f5ede0; color: #7a6f5e;
-      &--published { background: #d4e6d3; color: #2a6e3a; } }
+      &.status-badge--published { background: #d4e6d3; color: #2a6e3a; } }
     .action-btns { display: flex; gap: .5rem; }
     .action-btn { padding: .3rem .75rem; border-radius: 5px; font-size: .8rem; font-weight: 600; cursor: pointer; text-decoration: none; border: none; transition: background .15s; }
     .action-btn--edit { background: #fdf0d5; color: #8a5e00; &:hover { background: #fce5b0; } }

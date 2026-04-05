@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/users/user-public-profile.component').then(m => m.UserPublicProfileComponent),
   },
   {
+    path: 'calculator',
+    loadComponent: () => import('./features/calculator/lye-calculator.component').then(m => m.LyeCalculatorComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

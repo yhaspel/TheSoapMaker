@@ -1,5 +1,4 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { SubscriptionFacade } from '../../../abstraction/subscription.facade';
 import { AuthFacade } from '../../../abstraction/auth.facade';
@@ -8,7 +7,7 @@ import { AnalyticsService } from '../../../core/services/analytics.service';
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [DatePipe],
   template: `
     <div class="pricing-page">
       <div class="container">

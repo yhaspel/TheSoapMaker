@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.model';
+import { map } from 'rxjs/operators';
+import { User, RawUser, mapUser } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 
 interface LoginResponse { access: string; refresh: string; }
@@ -35,15 +36,14 @@ export class AuthService {
   }
 
   getProfile(): Observable<User> {
-    return this.http.get<User>(`${this.base}/auth/user/`);
+    return this.http.get<RawUser>(`${this.base}/auth/user/`).pipe(map(mapUser));
   }
 
   updateProfile(data: Partial<Pick<User, 'displayName' | 'bio' | 'avatarUrl'>>): Observable<User> {
-    // Backend uses snake_case field names
     const payload: Record<string, unknown> = {};
     if (data.displayName !== undefined) payload['display_name'] = data.displayName;
     if (data.bio !== undefined) payload['bio'] = data.bio;
     if (data.avatarUrl !== undefined) payload['avatar_url'] = data.avatarUrl;
-    return this.http.put<User>(`${this.base}/auth/user/`, payload);
+    return this.http.put<RawUser>(`${this.base}/auth/user/`, payload).pipe(map(mapUser));
   }
 }

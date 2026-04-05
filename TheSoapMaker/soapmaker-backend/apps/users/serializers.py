@@ -73,3 +73,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return None
         delta = obj.trial_ends_at - timezone.now()
         return max(delta.days, 0) if delta.total_seconds() > 0 else 0
+
+
+from dj_rest_auth.registration.serializers import RegisterSerializer
+
+class CustomRegisterSerializer(RegisterSerializer):
+    """
+    dj-rest-auth has a bug with allauth 65+ where it assumes 'username' is required
+    if it's missing from ACCOUNT_SIGNUP_FIELDS. We explicitly remove it here and
+    add the frontend's display_name field.
+    """
+    username = None
+    display_name = serializers.CharField(max_length=100, required=True)
+
+    def get_cleaned_data(self):
+        data = super().get_cleaned_data()
+        data['display_name'] = self.validated_data.get('display_name', '')
+        return data
+
+    def custom_signup(self, request, user):
+        user.display_name = self.cleaned_data.get('display_name', '')
+        user.save(update_fields=['display_name'])

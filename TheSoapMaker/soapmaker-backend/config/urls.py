@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from apps.users.urls import users_urlpatterns
@@ -55,8 +57,6 @@ urlpatterns = [
 
     # Social OAuth redirects (allauth)
     # GET /api/v1/auth/google/login/
-    # GET /api/v1/auth/facebook/login/
-    # GET /api/v1/auth/twitter/login/
     path("api/v1/auth/", include("allauth.socialaccount.urls")),
     path("api/v1/auth/", include(build_provider_urlpatterns())),
 
@@ -68,3 +68,7 @@ urlpatterns = [
     path("api/v1/", include("apps.comments.urls")),
     path("api/v1/", include("apps.subscriptions.urls")),
 ]
+
+# Serve media files locally during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

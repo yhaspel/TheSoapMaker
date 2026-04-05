@@ -34,6 +34,7 @@ export interface Recipe {
   yieldBars: number;
   imageUrl: string;
   isPublished: boolean;
+  isPremium: boolean;
   tags: Tag[];
   ingredients: RecipeIngredient[];
   steps: Step[];

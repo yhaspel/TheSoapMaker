@@ -11,6 +11,16 @@ import { SlicePipe } from '@angular/common';
   imports: [RouterLink, CureTimePipe, SlicePipe],
   template: `
     <div class="my-recipes container">
+      @if (!authFacade.isAuthenticated()) {
+        <div class="page-header">
+          <h1>My Recipes</h1>
+        </div>
+        <div class="guest-state">
+          <p>Sign in to see and manage your recipes.</p>
+          <a routerLink="/auth/login" class="btn-primary">Sign In</a>
+          <a routerLink="/auth/register" class="btn-accent">Get Started</a>
+        </div>
+      } @else {
       <div class="page-header">
         <div>
           <h1>My Recipes</h1>
@@ -75,6 +85,7 @@ import { SlicePipe } from '@angular/common';
           </table>
         </div>
       }
+      }
     </div>
   `,
   styles: [`
@@ -108,6 +119,8 @@ import { SlicePipe } from '@angular/common';
     .action-btn { padding: .3rem .75rem; border-radius: 5px; font-size: .8rem; font-weight: 600; cursor: pointer; text-decoration: none; border: none; transition: background .15s; }
     .action-btn--edit { background: #fdf0d5; color: #8a5e00; &:hover { background: #fce5b0; } }
     .action-btn--delete { background: #fde8e8; color: #8b1a1a; &:hover { background: #fac9c9; } }
+    .guest-state { text-align: center; padding: 4rem 2rem; color: #7a6f5e; display: flex; flex-direction: column; align-items: center; gap: 1rem; p { font-size: 1.1rem; margin-bottom: .5rem; } }
+    .btn-accent { padding: .625rem 1.5rem; background: #f5ede0; color: #c1633a; border-radius: 8px; font-weight: 600; text-decoration: none; &:hover { background: #ede0d3; } }
   `],
 })
 export class MyRecipesComponent implements OnInit {
@@ -117,7 +130,9 @@ export class MyRecipesComponent implements OnInit {
   myRecipes = this.recipeFacade.myRecipes;
 
   ngOnInit(): void {
-    this.recipeFacade.loadMyRecipes();
+    if (this.authFacade.isAuthenticated()) {
+      this.recipeFacade.loadMyRecipes();
+    }
   }
 
   onDelete(slug: string, id: string): void {

@@ -320,7 +320,7 @@ const DRAFT_KEY = 'sm_recipe_draft';
       display: flex; gap: .875rem; align-items: flex-start;
       background: #fff; border: 1.5px solid #e5d9ca; border-radius: 10px; padding: .875rem 1rem;
       transition: border-color .15s, box-shadow .15s;
-      &--editing { border-color: #c1633a; box-shadow: 0 0 0 3px rgba(193,99,58,.1); }
+      &.step-card--editing { border-color: #c1633a; box-shadow: 0 0 0 3px rgba(193,99,58,.1); }
     }
 
     .step-badge {
@@ -348,11 +348,11 @@ const DRAFT_KEY = 'sm_recipe_draft';
       display: inline-flex; align-items: center; gap: .3rem;
       padding: .3rem .625rem; border-radius: 6px; font-size: .8rem; font-weight: 600; cursor: pointer;
       border: 1.5px solid transparent; transition: all .15s;
-      &--edit {
+      &.icon-btn--edit {
         color: #c1633a; border-color: #e5d9ca; background: #fdf6ec;
         &:hover { border-color: #c1633a; background: rgba(193,99,58,.08); }
       }
-      &--remove {
+      &.icon-btn--remove {
         color: #c0392b; border-color: #fde8e8; background: #fff;
         &:hover { border-color: #c0392b; background: #fde8e8; }
       }

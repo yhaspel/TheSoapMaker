@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '../../core/guards/auth.guard';
+import { premiumGuard } from '../../core/guards/premium.guard';
 
 export const RECIPE_ROUTES: Routes = [
   {
@@ -11,19 +11,17 @@ export const RECIPE_ROUTES: Routes = [
     path: 'new',
     loadComponent: () =>
       import('./recipe-form/recipe-form.component').then(m => m.RecipeFormComponent),
-    canActivate: [authGuard],
+    canActivate: [premiumGuard],
   },
   {
     path: 'my-recipes',
     loadComponent: () =>
       import('./my-recipes/my-recipes.component').then(m => m.MyRecipesComponent),
-    canActivate: [authGuard],
   },
   {
     path: 'bookmarks',
     loadComponent: () =>
       import('./bookmarks/bookmarks.component').then(m => m.BookmarksComponent),
-    canActivate: [authGuard],
   },
   {
     path: ':slug',
@@ -34,6 +32,6 @@ export const RECIPE_ROUTES: Routes = [
     path: ':slug/edit',
     loadComponent: () =>
       import('./recipe-form/recipe-form.component').then(m => m.RecipeFormComponent),
-    canActivate: [authGuard],
+    canActivate: [premiumGuard],
   },
 ];

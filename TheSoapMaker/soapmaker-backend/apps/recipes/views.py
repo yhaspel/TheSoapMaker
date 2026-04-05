@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema
 
 from .filters import RecipeFilter
 from .models import Ingredient, Recipe, RecipeIngredient, Bookmark
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsPremiumUser, CanViewPremiumRecipe
 from django.shortcuts import get_object_or_404
 from .serializers import (
     IngredientSerializer,
@@ -61,11 +61,14 @@ class RecipeListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            return [IsAuthenticated()]
+            return [IsPremiumUser()]
         return [AllowAny()]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user,
+            is_premium=self.request.user.is_premium,
+        )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -86,7 +89,13 @@ class RecipeDetailView(generics.RetrieveUpdateDestroyAPIView):
         .prefetch_related("tags", "recipe_ingredients__ingredient", "steps")
     )
     lookup_field = "slug"
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly, CanViewPremiumRecipe]
+
+    def get_permissions(self):
+        if self.request.method in ("PUT", "PATCH"):
+            # Editing requires premium + being the author
+            return [IsPremiumUser(), IsAuthorOrReadOnly()]
+        return [CanViewPremiumRecipe()]
 
     def get_serializer_class(self):
         if self.request.method in ("PUT", "PATCH"):

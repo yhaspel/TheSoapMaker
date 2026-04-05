@@ -33,6 +33,7 @@ RECIPES = [
     # ── 1 ────────────────────────────────────────────────────────────────────
     {
         "name": "Classic Castile Bar",
+        "image_url": "/media/recipe-images/classic-castile-bar.jpg",
         "description": (
             "The purest soap you can make — 100% extra-virgin olive oil saponified "
             "with sodium hydroxide. Castile soap is legendary for its gentle, "
@@ -67,6 +68,7 @@ RECIPES = [
     # ── 2 ────────────────────────────────────────────────────────────────────
     {
         "name": "Lavender Dream Bar",
+        "image_url": "/media/recipe-images/lavender-dream-bar.jpg",
         "description": (
             "A beautifully balanced everyday bar combining the cleansing power of "
             "coconut oil with the gentle conditioning of olive oil. Scented with "
@@ -104,6 +106,7 @@ RECIPES = [
     # ── 3 ────────────────────────────────────────────────────────────────────
     {
         "name": "Goat Milk & Honey Bar",
+        "image_url": "/media/recipe-images/goat-milk-honey-bar.jpg",
         "description": (
             "Goat milk is packed with lactic acid, vitamins A and B, and natural "
             "fats that make it a superb skin-conditioning liquid. Paired with raw "
@@ -143,6 +146,7 @@ RECIPES = [
     # ── 4 ────────────────────────────────────────────────────────────────────
     {
         "name": "Activated Charcoal Detox Bar",
+        "image_url": "/media/recipe-images/activated-charcoal-detox-bar.jpg",
         "description": (
             "Black, striking, and powerful — this detox bar combines the pore-purifying "
             "action of activated charcoal with the antimicrobial properties of tea tree "
@@ -181,6 +185,7 @@ RECIPES = [
     # ── 5 ────────────────────────────────────────────────────────────────────
     {
         "name": "Peppermint Foot Scrub Bar",
+        "image_url": "/media/recipe-images/peppermint-foot-scrub-bar.jpg",
         "description": (
             "A refreshing, tingly bar formulated specifically for hard-working feet. "
             "Peppermint essential oil provides an invigorating cooling sensation while "
@@ -219,6 +224,7 @@ RECIPES = [
     # ── 6 ────────────────────────────────────────────────────────────────────
     {
         "name": "Avocado & Hemp Luxury Bar",
+        "image_url": "/media/recipe-images/avocado-hemp-luxury-bar.jpg",
         "description": (
             "A skin-nourishing luxury bar packed with fatty acids. Avocado oil is "
             "rich in vitamins A, D, and E while hemp seed oil delivers the perfect "
@@ -257,6 +263,7 @@ RECIPES = [
     # ── 7 ────────────────────────────────────────────────────────────────────
     {
         "name": "Rustic Hot Process Soap",
+        "image_url": "/media/recipe-images/rustic-hot-process-soap.jpg",
         "description": (
             "Hot process soap is the 'no waiting' sibling of cold process — the "
             "saponification reaction is cooked to completion in the pot, so the bar "
@@ -295,6 +302,7 @@ RECIPES = [
     # ── 8 ────────────────────────────────────────────────────────────────────
     {
         "name": "Liquid Castile Soap",
+        "image_url": "/media/recipe-images/liquid-castile-soap.jpg",
         "description": (
             "A silky, gentle liquid soap made with potassium hydroxide and olive oil. "
             "Liquid Castile is incredibly versatile — use it as a body wash, gentle "
@@ -329,6 +337,7 @@ RECIPES = [
     # ── 9 ────────────────────────────────────────────────────────────────────
     {
         "name": "Cocoa Butter & Vanilla Dream",
+        "image_url": "/media/recipe-images/cocoa-butter-vanilla-dream.jpg",
         "description": (
             "Luxurious and indulgent, this bar combines the hardness and subtle "
             "chocolatey note of cocoa butter with the sweet warmth of vanilla. "
@@ -364,6 +373,7 @@ RECIPES = [
     # ── 10 ───────────────────────────────────────────────────────────────────
     {
         "name": "Tea Tree & Neem Acne Bar",
+        "image_url": "/media/recipe-images/tea-tree-neem-acne-bar.jpg",
         "description": (
             "A targeted bar formulated for acne-prone and problematic skin. Neem oil "
             "has been used for centuries in Ayurvedic skin care for its powerful "
@@ -402,6 +412,7 @@ RECIPES = [
     # ── 11 ───────────────────────────────────────────────────────────────────
     {
         "name": "Oatmeal & Honey Sensitive Bar",
+        "image_url": "/media/recipe-images/oatmeal-honey-sensitive-bar.jpg",
         "description": (
             "Crafted for the most sensitive of skin types, this gentle bar contains "
             "colloidal oatmeal — finely milled oats that have been shown in clinical "
@@ -439,6 +450,7 @@ RECIPES = [
     # ── 12 ───────────────────────────────────────────────────────────────────
     {
         "name": "Aloe Vera Moisture Bar",
+        "image_url": "/media/recipe-images/aloe-vera-moisture-bar.jpg",
         "description": (
             "Aloe vera juice replaces all of the water in this deeply hydrating bar. "
             "Aloe contains polysaccharides and enzymes that soothe sunburn, reduce "
@@ -477,6 +489,7 @@ RECIPES = [
     # ── 13 ───────────────────────────────────────────────────────────────────
     {
         "name": "Mango & Cocoa Luxury Bar",
+        "image_url": "/media/recipe-images/mango-cocoa-luxury-bar.jpg",
         "description": (
             "A decadent combination of mango butter and cocoa butter creates a bar "
             "that is exceptionally hard, slow to dissolve, and wonderfully moisturising. "
@@ -513,6 +526,7 @@ RECIPES = [
     # ── 14 ───────────────────────────────────────────────────────────────────
     {
         "name": "Spirulina & Hemp Earth Bar",
+        "image_url": "/media/recipe-images/spirulina-hemp-earth-bar.jpg",
         "description": (
             "An earthy, naturally green bar coloured with spirulina powder and "
             "enriched with hemp seed oil. Spirulina is a micro-algae packed with "
@@ -551,6 +565,7 @@ RECIPES = [
     # ── 15 ───────────────────────────────────────────────────────────────────
     {
         "name": "Tallow & Lard Heritage Bar",
+        "image_url": "/media/recipe-images/tallow-lard-heritage-bar.jpg",
         "description": (
             "Before vegetable oils became widely available, soap makers relied on "
             "animal tallows and lards to produce firm, long-lasting bars. This "
@@ -587,6 +602,7 @@ RECIPES = [
     # ── 16 ───────────────────────────────────────────────────────────────────
     {
         "name": "Coconut Milk Lather Bar",
+        "image_url": "/media/recipe-images/coconut-milk-lather-bar.jpg",
         "description": (
             "Coconut milk replaces water in this ultra-creamy bar, lending its "
             "natural fats, proteins, and vitamin E to produce a truly luxurious "
@@ -623,6 +639,7 @@ RECIPES = [
     # ── 17 ───────────────────────────────────────────────────────────────────
     {
         "name": "Kaolin Clay & Rose Bar",
+        "image_url": "/media/recipe-images/kaolin-clay-rose-bar.jpg",
         "description": (
             "Kaolin clay adds a silky, velvety slip to this elegantly pink bar. "
             "Clay particles gently absorb excess oils from the skin's surface, making "
@@ -661,6 +678,7 @@ RECIPES = [
     # ── 18 ───────────────────────────────────────────────────────────────────
     {
         "name": "Melt & Pour Glycerin Clear Bar",
+        "image_url": "/media/recipe-images/melt-pour-glycerin-clear-bar.jpg",
         "description": (
             "Melt-and-pour soap making is the perfect entry point for beginners and "
             "younger crafters. No lye handling required — just melt the pre-made "
@@ -694,6 +712,7 @@ RECIPES = [
     # ── 19 ───────────────────────────────────────────────────────────────────
     {
         "name": "Sweet Almond & Rice Bran Silk Bar",
+        "image_url": "/media/recipe-images/sweet-almond-rice-bran-silk-bar.jpg",
         "description": (
             "Sweet almond oil and rice bran oil are both celebrated for their "
             "skin-softening and anti-aging properties. This delicate bar is light, "
@@ -732,6 +751,7 @@ RECIPES = [
     # ── 20 ───────────────────────────────────────────────────────────────────
     {
         "name": "Sunflower & Canola Economical Bar",
+        "image_url": "/media/recipe-images/sunflower-canola-economical-bar.jpg",
         "description": (
             "Proof that excellent soap doesn't require expensive ingredients. "
             "Sunflower and canola oils are both readily available, affordable, and "
@@ -813,6 +833,7 @@ class Command(BaseCommand):
                     "cure_time_days": data["cure_time_days"],
                     "batch_size_grams": data["batch_size_grams"],
                     "yield_bars": data["yield_bars"],
+                    "image_url": data.get("image_url", ""),
                     "is_published": True,
                     "average_rating": data.get("average_rating", 0.0),
                     "rating_count": data.get("rating_count", 0),

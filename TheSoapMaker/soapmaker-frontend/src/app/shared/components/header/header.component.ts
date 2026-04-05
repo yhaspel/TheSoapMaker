@@ -14,9 +14,7 @@ import { AuthFacade } from '../../../abstraction/auth.facade';
         <nav class="header__nav" aria-label="Main navigation">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
           <a routerLink="/recipes" routerLinkActive="active">Recipes</a>
-          @if (facade.isAuthenticated()) {
-            <a routerLink="/recipes/my-recipes" routerLinkActive="active">My Recipes</a>
-          }
+          <a routerLink="/recipes/my-recipes" routerLinkActive="active">My Recipes</a>
           <a routerLink="/calculator" routerLinkActive="active">Lye Calculator</a>
           <a routerLink="/premium/pricing" routerLinkActive="active">Pricing</a>
         </nav>
@@ -90,7 +88,7 @@ import { AuthFacade } from '../../../abstraction/auth.facade';
     }
     .header__avatar {
       border-radius: 50%; object-fit: cover;
-      &--initials {
+      &.header__avatar--initials {
         display: inline-flex; align-items: center; justify-content: center;
         width: 36px; height: 36px;
         background: #c1633a; color: #fff;

@@ -24,7 +24,7 @@ import { AdBannerComponent } from '../../../shared/components/ad-banner/ad-banne
             <h1>Recipes</h1>
             <p class="page-header__sub">Discover {{ recipeFacade.totalCount() || recipeFacade.filteredRecipes().length }} handcrafted soap recipes</p>
           </div>
-          @if (authFacade.isAuthenticated()) {
+          @if (subscriptionFacade.isPremium()) {
             <a routerLink="/recipes/new" class="btn-primary">+ New Recipe</a>
           }
         </div>
@@ -116,7 +116,7 @@ import { AdBannerComponent } from '../../../shared/components/ad-banner/ad-banne
             } @else if (recipeFacade.filteredRecipes().length === 0) {
               <div class="empty-state">
                 <p>🧼 No recipes found. Be the first to contribute!</p>
-                @if (authFacade.isAuthenticated()) {
+                @if (subscriptionFacade.isPremium()) {
                   <a routerLink="/recipes/new" class="btn-primary">Create a Recipe</a>
                 } @else {
                   <button class="btn-secondary" (click)="clearFilters()">Clear Filters</button>

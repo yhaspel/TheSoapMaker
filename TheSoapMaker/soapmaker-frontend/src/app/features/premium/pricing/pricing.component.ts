@@ -203,7 +203,11 @@ export class PricingComponent implements OnInit {
     { q: 'What is the difference between monthly and annual?', a: 'Same features, different billing cycle. Annual saves you about 33% compared to paying monthly. Perfect if you know you will be crafting long-term.' },
   ];
 
-  ngOnInit() { this.subscriptionFacade.loadStatus(); }
+  ngOnInit() {
+    if (this.authFacade.isAuthenticated()) {
+      this.subscriptionFacade.loadStatus();
+    }
+  }
 
   selectPlan(plan: 'monthly' | 'annual') {
     if (!this.authFacade.isAuthenticated()) return;

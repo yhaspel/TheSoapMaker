@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { RecipeFacade } from '../../abstraction/recipe.facade';
+import { AuthFacade } from '../../abstraction/auth.facade';
 import { SubscriptionFacade } from '../../abstraction/subscription.facade';
 import { RecipeCardComponent } from '../../shared/components/recipe-card/recipe-card.component';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
@@ -93,15 +94,27 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
   styles: [`
     /* ── Hero ──────────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(135deg, #fdf6ec 0%, #f5ede0 100%);
+      position: relative;
+      background: url('/images/bg-hero.jpg') center/cover no-repeat;
       padding: 6rem 0 4rem;
+      /* Fallback gradient shown while image loads or if image is missing */
+      background-color: #2d2416;
+    }
+    /* Dark overlay for text readability */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26,18,8,.68) 0%, rgba(45,36,22,.52) 100%);
+      pointer-events: none;
     }
     .hero__inner {
+      position: relative; z-index: 1;
       display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;
       @media(min-width:768px) { grid-template-columns: 1fr 1fr; }
     }
-    .hero__title { font-size: clamp(2rem,4vw,3rem); line-height: 1.15; margin-bottom: 1.25rem; color: #1a1208; }
-    .hero__sub { font-size: 1.1rem; color: #7a6f5e; margin-bottom: 2rem; line-height: 1.6; }
+    .hero__title { font-size: clamp(2rem,4vw,3rem); line-height: 1.15; margin-bottom: 1.25rem; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.35); }
+    .hero__sub { font-size: 1.1rem; color: rgba(255,255,255,.85); margin-bottom: 2rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(0,0,0,.3); }
     .hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-primary {
       display: inline-flex; align-items: center; justify-content: center;
@@ -112,19 +125,20 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
     }
     .btn-secondary {
       display: inline-flex; align-items: center; justify-content: center;
-      border: 2px solid #c1633a; color: #c1633a; padding: .75rem 1.75rem;
+      border: 2px solid rgba(255,255,255,.85); color: #fff; padding: .75rem 1.75rem;
       border-radius: 8px; font-weight: 700; font-size: 1rem;
-      text-decoration: none; transition: background .15s;
-      &:hover { background: rgba(193,99,58,.06); text-decoration: none; }
+      text-decoration: none; transition: background .15s, border-color .15s;
+      &:hover { background: rgba(255,255,255,.12); border-color: #fff; text-decoration: none; }
     }
     .btn-lg { padding: .875rem 2rem; font-size: 1.1rem; }
 
-    /* Soap stack visual */
-    .hero__visual { display: flex; justify-content: center; }
+    /* Soap stack visual — hidden on mobile when image fills the frame */
+    .hero__visual { display: flex; justify-content: center; @media(max-width:767px) { display: none; } }
     .hero__soap-stack { position: relative; width: 200px; height: 200px; }
     .soap-block {
       position: absolute; border-radius: 10px;
       transition: transform .3s;
+      box-shadow: 0 4px 16px rgba(0,0,0,.35);
     }
     .soap-block--1 { width: 130px; height: 70px; background: #e8d5b7; top: 60px; left: 20px; transform: rotate(-6deg); }
     .soap-block--2 { width: 120px; height: 65px; background: #d4a373; top: 30px; left: 40px; transform: rotate(3deg); }
@@ -174,6 +188,7 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
 export class HomeComponent implements OnInit {
   private title = inject(Title);
   private meta = inject(Meta);
+  private authFacade = inject(AuthFacade);
   recipeFacade = inject(RecipeFacade);
   subscriptionFacade = inject(SubscriptionFacade);
 
@@ -185,6 +200,10 @@ export class HomeComponent implements OnInit {
     this.meta.updateTag({ property: 'og:url', content: 'https://thesoapmaker.com' });
 
     this.recipeFacade.loadRecipes();
-    this.subscriptionFacade.loadStatus();
+
+    // Only fetch subscription status for logged-in users
+    if (this.authFacade.isAuthenticated()) {
+      this.subscriptionFacade.loadStatus();
+    }
   }
 }

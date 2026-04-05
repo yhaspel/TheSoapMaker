@@ -99,6 +99,7 @@ function mapRecipe(r: Record<string, unknown>): Recipe {
     yieldBars: r['yield_bars'] as number,
     imageUrl: r['image_url'] as string ?? '',
     isPublished: r['is_published'] as boolean ?? false,
+    isPremium: r['is_premium'] as boolean ?? false,
     tags: ((r['tags'] ?? []) as Record<string, unknown>[]).map(mapTag),
     ingredients: ((r['ingredients'] ?? []) as Record<string, unknown>[]).map(mapIngredient),
     steps: ((r['steps'] ?? []) as Record<string, unknown>[]).map(mapStep),

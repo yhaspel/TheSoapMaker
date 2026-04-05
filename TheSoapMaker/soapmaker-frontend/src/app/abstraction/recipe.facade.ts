@@ -82,7 +82,10 @@ export class RecipeFacade {
         this.recipeStore.setLoading(false);
       },
       error: (err) => {
-        this.recipeStore.setError(err.status === 404 ? 'Recipe not found' : err.message);
+        let errorMsg = err.message;
+        if (err.status === 404) errorMsg = 'Recipe not found';
+        else if (err.status === 403) errorMsg = 'premium_required';
+        this.recipeStore.setError(errorMsg);
         this.recipeStore.setLoading(false);
       },
     });

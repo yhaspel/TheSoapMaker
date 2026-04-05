@@ -60,8 +60,9 @@ import { AnalyticsService } from '../../../core/services/analytics.service';
     </div>
   `,
   styles: [`
-    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fdf6ec, #f5ede0); padding: 2rem; }
-    .auth-card { width: 100%; max-width: 440px; background: #fff9f3; border: 1px solid #e5d9ca; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 32px rgba(0,0,0,.10); }
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: url('/images/bg-texture.jpg') center/cover no-repeat; background-color: #2d2416; padding: 2rem; position: relative; }
+    .auth-page::before { content: ''; position: absolute; inset: 0; background: rgba(26,18,8,.55); pointer-events: none; }
+    .auth-card { width: 100%; max-width: 440px; background: #fff9f3; border: 1px solid #e5d9ca; border-radius: 16px; padding: 2.5rem; box-shadow: 0 8px 40px rgba(0,0,0,.28); position: relative; z-index: 1; }
     .auth-card__header { text-align: center; margin-bottom: 2rem; h1 { font-size: 1.75rem; margin-bottom: .75rem; } }
     .auth-logo { font-size: 1.4rem; font-weight: 700; color: #c1633a; text-decoration: none; display: block; margin-bottom: 1.25rem; &:hover { text-decoration: none; } }
     .trial-badge { display: inline-block; background: linear-gradient(135deg, #c1633a, #e8956d); color: #fff; padding: .5rem 1rem; border-radius: 20px; font-size: .875rem; font-weight: 600; }

@@ -1,5 +1,5 @@
 import { Component, Input, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Recipe } from '../../../core/models/recipe.model';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { CureTimePipe } from '../../pipes/cure-time.pipe';
@@ -12,7 +12,12 @@ import { SubscriptionFacade } from '../../../abstraction/subscription.facade';
   standalone: true,
   imports: [RouterLink, StarRatingComponent, CureTimePipe],
   template: `
-    <article class="recipe-card" [routerLink]="['/recipes', recipe.slug]">
+    <article
+      class="recipe-card"
+      [class.recipe-card--premium]="recipe.isPremium"
+      [class.recipe-card--locked]="recipe.isPremium && !subscriptionFacade.isPremium()"
+      (click)="onCardClick($event)"
+    >
       <div class="recipe-card__image-wrap">
         <img
           [src]="recipe.imageUrl || 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400'"
@@ -21,6 +26,15 @@ import { SubscriptionFacade } from '../../../abstraction/subscription.facade';
           loading="lazy"
         />
         <span class="recipe-card__method badge badge-method">{{ methodLabel(recipe.method) }}</span>
+        @if (recipe.isPremium) {
+          <span class="recipe-card__premium-badge">Premium</span>
+        }
+        @if (recipe.isPremium && !subscriptionFacade.isPremium()) {
+          <div class="recipe-card__lock-overlay">
+            <span class="recipe-card__lock-icon">🔒</span>
+            <span class="recipe-card__lock-text">Premium Only</span>
+          </div>
+        }
       </div>
 
       <div class="recipe-card__body">
@@ -84,11 +98,37 @@ import { SubscriptionFacade } from '../../../abstraction/subscription.facade';
     .recipe-card__author-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
     .recipe-card__actions { display: flex; align-items: center; gap: .375rem; }
     .recipe-card__bookmark { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: .25rem; color: #cdbfab; transition: color .1s, transform .1s; &.recipe-card__bookmark--active { color: #c1633a; } &:hover { transform: scale(1.2); } }
+
+    /* Premium recipe styling */
+    .recipe-card--premium {
+      background: linear-gradient(135deg, #fffdf5 0%, #fdf3d7 100%);
+      border-color: #e0c97f;
+      box-shadow: 0 2px 8px rgba(184, 155, 60, .1);
+    }
+    .recipe-card--premium:hover { box-shadow: 0 8px 24px rgba(184, 155, 60, .2); }
+    .recipe-card--locked { cursor: default; }
+    .recipe-card--locked:hover { transform: none; }
+    .recipe-card__premium-badge {
+      position: absolute; top: .75rem; right: .75rem;
+      padding: 2px 10px; border-radius: 4px;
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      background: linear-gradient(135deg, #d4a017, #f0c850); color: #fff;
+      box-shadow: 0 1px 4px rgba(184, 155, 60, .3);
+    }
+    .recipe-card__lock-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0, 0, 0, .35);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .25rem; border-radius: 0;
+    }
+    .recipe-card__lock-icon { font-size: 1.5rem; }
+    .recipe-card__lock-text { color: #fff; font-size: .8rem; font-weight: 600; }
   `],
 })
 export class RecipeCardComponent {
   @Input({ required: true }) recipe!: Recipe;
 
+  private router = inject(Router);
   recipeFacade = inject(RecipeFacade);
   authFacade = inject(AuthFacade);
   subscriptionFacade = inject(SubscriptionFacade);
@@ -99,6 +139,17 @@ export class RecipeCardComponent {
       melt_and_pour: 'M&P', liquid: 'Liquid'
     };
     return map[method] ?? method;
+  }
+
+  onCardClick(event: Event): void {
+    // Block navigation to premium recipe details for non-premium users
+    if (this.recipe.isPremium && !this.subscriptionFacade.isPremium()) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.router.navigate(['/premium/pricing']);
+      return;
+    }
+    this.router.navigate(['/recipes', this.recipe.slug]);
   }
 
   onBookmark(event: Event): void {

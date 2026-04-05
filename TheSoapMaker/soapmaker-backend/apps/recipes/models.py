@@ -64,6 +64,10 @@ class Recipe(models.Model):
     yield_bars = models.PositiveIntegerField()
     image_url = models.URLField(max_length=500, blank=True)
     is_published = models.BooleanField(default=False)
+    is_premium = models.BooleanField(
+        default=False,
+        help_text="Auto-set to True when the author is a premium user at creation time.",
+    )
     tags = models.ManyToManyField(Tag, blank=True)
     # Denormalized for fast sorting/listing — updated via signals
     average_rating = models.FloatField(default=0.0)

@@ -31,10 +31,12 @@ function handle401(
 ) {
   const refresh = localStorage.getItem('sm_refresh');
   if (!refresh) {
+    // No refresh token means the user was never logged in — just clear
+    // state and let the error propagate. Do NOT redirect to login;
+    // the login page should only appear when the user explicitly asks.
     authStore.setCurrentUser(null);
     authStore.setAccessToken(null);
-    router.navigate(['/auth/login']);
-    return throwError(() => new Error('No refresh token'));
+    return throwError(() => new Error('Not authenticated'));
   }
 
   if (isRefreshing) {
@@ -62,8 +64,8 @@ function handle401(
       localStorage.removeItem('sm_refresh');
       authStore.setCurrentUser(null);
       authStore.setAccessToken(null);
-      uiStore.addToast('Session expired. Please log in again.', 'error');
-      router.navigate(['/auth/login']);
+      uiStore.addToast('Session expired. Please sign in again.', 'error');
+      // Don't force-redirect — let the user choose to sign in.
       return throwError(() => err);
     }),
   );

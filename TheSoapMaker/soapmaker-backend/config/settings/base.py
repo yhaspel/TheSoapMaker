@@ -34,8 +34,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
-    "allauth.socialaccount.providers.twitter_oauth2",
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "cloudinary",
@@ -97,6 +95,10 @@ USE_TZ = True
 # Static files
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Media files (user-uploaded content + seed images served locally in dev)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -180,23 +182,6 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         "SCOPE": ["profile", "email"],
         "AUTH_PARAMS": {"access_type": "online"},
-    },
-    "facebook": {
-        "APP": {
-            "client_id": os.environ.get("FACEBOOK_CLIENT_ID", ""),
-            "secret": os.environ.get("FACEBOOK_CLIENT_SECRET", ""),
-            "key": "",
-        },
-        "METHOD": "oauth2",
-        "SCOPE": ["email", "public_profile"],
-        "FIELDS": ["id", "email", "name", "first_name", "last_name", "picture"],
-    },
-    "twitter_oauth2": {
-        "APP": {
-            "client_id": os.environ.get("TWITTER_CLIENT_ID", ""),
-            "secret": os.environ.get("TWITTER_CLIENT_SECRET", ""),
-            "key": "",
-        },
     },
 }
 

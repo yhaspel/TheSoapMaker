@@ -29,7 +29,7 @@ export class AnalyticsService {
     gtag('event', 'begin_checkout', { plan });
   }
 
-  trackSignUp(method: 'email' | 'google' | 'facebook'): void {
+  trackSignUp(method: 'email' | 'google'): void {
     if (!this.isActive) return;
     gtag('event', 'sign_up', { method });
   }

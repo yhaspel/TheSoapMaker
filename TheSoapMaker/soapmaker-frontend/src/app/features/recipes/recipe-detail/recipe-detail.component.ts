@@ -23,6 +23,15 @@ import { LyeCalculatorComponent } from '../../../shared/components/lye-calculato
   template: `
     @if (recipeFacade.loading()) {
       <div class="container" style="padding:4rem 0; text-align:center; color:#7a6f5e;">Loading recipe…</div>
+    } @else if (recipeFacade.error() === 'premium_required') {
+      <div class="container error-state">
+        <div class="error-card error-card--premium">
+          <h2>🔒 Premium Recipe</h2>
+          <p>This recipe is only available to premium members. Upgrade your plan to unlock all premium content.</p>
+          <a routerLink="/premium/pricing" class="btn-premium">Upgrade to Premium</a>
+          <a routerLink="/recipes" class="btn-secondary-link">← Back to Recipes</a>
+        </div>
+      </div>
     } @else if (recipeFacade.error()) {
       <div class="container error-state">
         <div class="error-card">
@@ -188,7 +197,7 @@ import { LyeCalculatorComponent } from '../../../shared/components/lye-calculato
                 <dt>Rating</dt><dd>{{ recipe.averageRating }}/5 ({{ recipe.ratingCount }} ratings)</dd>
               </dl>
             </div>
-            @if (authFacade.currentUser()?.id === recipe.authorId) {
+            @if (authFacade.currentUser()?.id === recipe.authorId && subscriptionFacade.isPremium()) {
               <a [routerLink]="['/recipes', recipe.slug, 'edit']" class="sidebar-edit-btn">✏️ Edit Recipe</a>
             }
             <a routerLink="/recipes" class="sidebar-back">← Back to Recipes</a>
@@ -214,6 +223,9 @@ import { LyeCalculatorComponent } from '../../../shared/components/lye-calculato
 
     .error-state { padding: 4rem 1rem; display: flex; justify-content: center; }
     .error-card { text-align: center; background: #fff9f3; border: 1px solid #e5d9ca; border-radius: 12px; padding: 3rem 2rem; max-width: 400px; width: 100%; h2 { margin-bottom: 1rem; } p { color: #7a6f5e; margin-bottom: 1.5rem; } }
+    .error-card--premium { background: linear-gradient(135deg, #fffdf5, #fdf3d7); border-color: #e0c97f; }
+    .btn-premium { display: inline-block; padding: .625rem 1.5rem; background: linear-gradient(135deg, #d4a017, #f0c850); color: #fff; border-radius: 8px; font-weight: 600; text-decoration: none; margin-bottom: .75rem; &:hover { filter: brightness(1.05); } }
+    .btn-secondary-link { display: block; color: #c1633a; font-size: .9rem; font-weight: 600; text-decoration: none; margin-top: .5rem; }
     .btn-primary { padding: .625rem 1.5rem; background: #c1633a; color: #fff; border-radius: 8px; font-weight: 600; text-decoration: none; &:hover { background: #a0512e; } }
 
     .recipe-detail__body { display: grid; grid-template-columns: 1fr; gap: 2.5rem; padding: 2.5rem 1rem;

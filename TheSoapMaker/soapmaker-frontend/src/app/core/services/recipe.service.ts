@@ -58,6 +58,15 @@ export interface CloudinaryUploadConfig {
   cloudName: string;
 }
 
+// Resolve image URLs: absolute URLs (Cloudinary etc.) pass through unchanged,
+// relative paths like /media/... get the backend origin prepended.
+function resolveImageUrl(url: string): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const backendOrigin = environment.apiUrl.replace(/\/api\/v1\/?$/, '');
+  return `${backendOrigin}${url}`;
+}
+
 // Map a raw backend recipe object (snake_case) to our Recipe model (camelCase)
 function mapRecipe(r: Record<string, unknown>): Recipe {
   const mapIngredient = (ri: Record<string, unknown>) => ({
@@ -97,7 +106,7 @@ function mapRecipe(r: Record<string, unknown>): Recipe {
     cureTimeDays: r['cure_time_days'] as number,
     batchSizeGrams: r['batch_size_grams'] as number,
     yieldBars: r['yield_bars'] as number,
-    imageUrl: r['image_url'] as string ?? '',
+    imageUrl: resolveImageUrl(r['image_url'] as string ?? ''),
     isPublished: r['is_published'] as boolean ?? false,
     isPremium: r['is_premium'] as boolean ?? false,
     tags: ((r['tags'] ?? []) as Record<string, unknown>[]).map(mapTag),

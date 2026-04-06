@@ -2,13 +2,27 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main]
 
 jobs:
-  backend-tests:
-    name: Backend Tests
+  foundation-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate repo structure
+        run: |
+          test -d soapmaker-backend
+          test -d soapmaker-frontend
+          test -f soapmaker-backend/manage.py
+          test -f soapmaker-frontend/angular.json
+          git diff --check
+
+  backend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,23 +44,29 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-          cache: "pip"
+          python-version: '3.11'
+          cache: 'pip'
           cache-dependency-path: soapmaker-backend/requirements/development.txt
 
-      - name: Install dependencies
-        run: pip install -r requirements/development.txt
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/development.txt
 
-      - name: Run tests with coverage
+      - name: Backend checks
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
           SECRET_KEY: ci-secret-key-not-for-production
           DEBUG: "True"
-        run: pytest --cov=apps --cov-report=xml --cov-report=term-missing -q
+        run: |
+          python manage.py check
+          pytest --cov=apps --cov-report=xml --cov-report=term-missing -q
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -55,30 +75,30 @@ jobs:
           flags: backend
         continue-on-error: true
 
-  frontend-tests:
-    name: Frontend Tests & Build
+  frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: soapmaker-frontend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
           cache-dependency-path: soapmaker-frontend/package-lock.json
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
 
-      - name: Run tests with coverage
-        run: npx ng test --watch=false --code-coverage --browsers=ChromeHeadless
-
-      - name: Production build
-        run: npx ng build --configuration=production
+      - name: Frontend checks
+        run: |
+          npx ng test --watch=false --code-coverage --browsers=ChromeHeadless
+          npx ng build --configuration=production
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
